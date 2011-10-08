@@ -2,14 +2,13 @@ package com.calclab.hablar.chat.client.ui;
 
 import java.util.Date;
 
-import com.calclab.emite.core.client.events.MessageEvent;
-import com.calclab.emite.core.client.events.MessageHandler;
+import com.calclab.emite.core.client.events.MessageReceivedEvent;
 import com.calclab.emite.core.client.packet.TextUtils;
-import com.calclab.emite.core.client.xmpp.stanzas.Message;
-import com.calclab.emite.core.client.xmpp.stanzas.Message.Type;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.Chat;
+import com.calclab.emite.core.client.stanzas.Message;
+import com.calclab.emite.core.client.stanzas.Message.Type;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.chat.pair.PairChat;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.emite.xep.delay.client.Delay;
 import com.calclab.emite.xep.delay.client.DelayHelper;
@@ -30,10 +29,10 @@ public class PairChatPresenter extends ChatPresenter implements PairChatPage {
 	public static final String TYPE = "Chat";
 	public static final String CHAT_MESSAGE = "ChatMessage";
 
-	private final Chat chat;
+	private final PairChat chat;
 	private final String userName;
 
-	public PairChatPresenter(final XmppRoster roster, final HablarEventBus eventBus, final Chat chat, final ChatDisplay display) {
+	public PairChatPresenter(final XmppRoster roster, final HablarEventBus eventBus, final PairChat chat, final ChatDisplay display) {
 		super(TYPE, Idify.uriId(chat.getURI().toString()), eventBus, chat, display);
 		this.chat = chat;
 		display.setId(getId());
@@ -44,10 +43,10 @@ public class PairChatPresenter extends ChatPresenter implements PairChatPage {
 		setVisibility(Visibility.notFocused);
 		model.setCloseable(true);
 
-		chat.addMessageReceivedHandler(new MessageHandler() {
+		chat.addMessageReceivedHandler(new MessageReceivedEvent.Handler() {
 
 			@Override
-			public void onMessage(final MessageEvent event) {
+			public void onMessageReceived(final MessageReceivedEvent event) {
 				receiveMessage(event.getMessage());
 			}
 		});
@@ -82,7 +81,7 @@ public class PairChatPresenter extends ChatPresenter implements PairChatPage {
 	}
 
 	@Override
-	public Chat getChat() {
+	public PairChat getChat() {
 		return chat;
 	}
 

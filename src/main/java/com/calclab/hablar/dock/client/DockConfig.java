@@ -1,11 +1,12 @@
 package com.calclab.hablar.dock.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
+
 
 public class DockConfig {
 	public static DockConfig getFromMeta() {
 		final DockConfig dockConfig = new DockConfig();
-		final String rosterDock = PageAssist.getMeta("hablar.dock.roster");
+		final String rosterDock = PageAssist.getMetaString("hablar.dock.roster", "left");
 		dockConfig.rosterDock = "right".equalsIgnoreCase(rosterDock) ? "right" : "left";
 		return dockConfig;
 	}

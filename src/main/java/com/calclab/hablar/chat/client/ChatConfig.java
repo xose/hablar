@@ -1,7 +1,8 @@
 package com.calclab.hablar.chat.client;
 
-import com.calclab.emite.browser.client.PageAssist;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.browser.PageAssist;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+
 
 /**
  * Configuration of chat module. It can be configured by html meta tags <br/>
@@ -14,10 +15,10 @@ public class ChatConfig {
 
 	public static ChatConfig getFromMeta() {
 		ChatConfig config = new ChatConfig();
-		String chatURI = PageAssist.getMeta("hablar.chatWidget");
+		String chatURI = PageAssist.getMetaString("hablar.chatWidget", null);
 		config.openChat = XmppURI.uri(chatURI);
-		config.sendButtonVisible = PageAssist.isMetaTrue("hablar.sendButton");
-		config.enableEmoticons = PageAssist.isMetaTrue("hablar.enableEmoticons");
+		config.sendButtonVisible = PageAssist.getMetaBoolean("hablar.sendButton", true);
+		config.enableEmoticons = PageAssist.getMetaBoolean("hablar.enableEmoticons", true);
 		return config;
 	}
 

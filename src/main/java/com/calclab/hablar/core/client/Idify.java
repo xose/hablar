@@ -1,6 +1,6 @@
 package com.calclab.hablar.core.client;
 
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 
 /**
  * Selenium ids

@@ -1,10 +1,10 @@
 package com.calclab.hablar.groupchat.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.hablar.chat.client.ui.PairChatPage;
 import com.calclab.hablar.chat.client.ui.PairChatPresenter;
 import com.calclab.hablar.core.client.Hablar;
@@ -31,13 +31,13 @@ public class HablarGroupChat {
 
 	private final Hablar hablar;
 	private final XmppSession session;
-	private final RoomManager roomManager;
+	private final RoomChatManager roomManager;
 	private final XmppRoster roster;
-	private final ChatManager chatManager;
+	private final PairChatManager chatManager;
 	private final HablarRoomsConfig config;
 
 	public HablarGroupChat(final Hablar hablar, final HablarRoomsConfig config, final XmppSession session, final XmppRoster roster,
-			final ChatManager chatManager, final RoomManager roomManager) {
+			final PairChatManager chatManager, final RoomChatManager roomManager) {
 		this.hablar = hablar;
 		this.config = config;
 		this.session = session;

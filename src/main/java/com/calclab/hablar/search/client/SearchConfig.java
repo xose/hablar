@@ -1,16 +1,16 @@
 package com.calclab.hablar.search.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
 import com.calclab.hablar.search.client.query.NicknameStartsWithSearchQueryFactory;
 
 public class SearchConfig {
 
 	public static SearchConfig getFromMeta() {
 		final SearchConfig config = new SearchConfig();
-		config.searchCloseable = PageAssist.isMetaTrue("hablar.searchCloseable");
-		config.searchOnRoster = PageAssist.isMetaTrue("hablar.searchOnRoster");
-		config.showSearchPageOnEmptyRoster = PageAssist.isMetaTrue("hablar.showSearchPageOnEmptyRoster", false);
-		config.searchService = PageAssist.getMeta("emite.searchHost");
+		config.searchCloseable = PageAssist.getMetaBoolean("hablar.searchCloseable", true);
+		config.searchOnRoster = PageAssist.getMetaBoolean("hablar.searchOnRoster", true);
+		config.showSearchPageOnEmptyRoster = PageAssist.getMetaBoolean("hablar.showSearchPageOnEmptyRoster", false);
+		config.searchService = PageAssist.getMetaString("emite.searchHost", "search.localhost");
 		return config;
 	}
 

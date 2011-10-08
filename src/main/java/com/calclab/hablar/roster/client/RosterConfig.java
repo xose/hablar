@@ -1,13 +1,13 @@
 package com.calclab.hablar.roster.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.hablar.core.client.ui.menu.SimpleAction;
 
 public class RosterConfig {
 	public static RosterConfig getFromMeta() {
 		final RosterConfig config = new RosterConfig();
-		config.oneClickChat = PageAssist.isMetaTrue("hablar.oneClickChat");
+		config.oneClickChat = PageAssist.getMetaBoolean("hablar.oneClickChat", true);
 		return config;
 	}
 

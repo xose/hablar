@@ -1,10 +1,9 @@
 package com.calclab.hablar.login.client;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.PagePresenter;
 import com.calclab.hablar.core.client.page.events.UserMessageEvent;
@@ -26,7 +25,7 @@ public class LoginPage extends PagePresenter<LoginDisplay> {
 		display.getAction().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(final ClickEvent event) {
-				if (SessionStates.disconnected.equals(session.getSessionState())) {
+				if (SessionStatus.disconnected.equals(session.getStatus())) {
 					login();
 				} else {
 					logout();
@@ -34,17 +33,17 @@ public class LoginPage extends PagePresenter<LoginDisplay> {
 			}
 		});
 
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				setState(event.getState());
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
+				setStatus(event.getStatus());
 			}
 		});
 
 	}
 
-	private void fireUserMessage(final String state) {
-		final String message = LoginMessages.msg.sessionState(state);
+	private void fireUserMessage(final SessionStatus state) {
+		final String message = LoginMessages.msg.sessionState(state.toString());
 		eventBus.fireEvent(new UserMessageEvent(this, message, LOGIN_MESSAGE));
 	}
 
@@ -58,17 +57,17 @@ public class LoginPage extends PagePresenter<LoginDisplay> {
 		session.logout();
 	}
 
-	private void setState(final String state) {
+	private void setStatus(final SessionStatus status) {
 		String actionText, pageTitle;
 		ImageResource icon;
 		boolean actionEnabled;
-		if (SessionStates.isReady(state)) {
+		if (SessionStatus.isReady(status)) {
 			actionText = LoginMessages.msg.logout();
 			actionEnabled = true;
 			final String userName = session.getCurrentUserURI().getNode();
 			pageTitle = LoginMessages.msg.connectedAs(userName);
 			icon = IconsBundle.bundle.onIcon();
-		} else if (SessionStates.isDisconnected(state)) {
+		} else if (SessionStatus.isDisconnected(status)) {
 			actionText = LoginMessages.msg.login();
 			actionEnabled = true;
 			pageTitle = LoginMessages.msg.disconnected();
@@ -80,10 +79,10 @@ public class LoginPage extends PagePresenter<LoginDisplay> {
 		}
 		display.getActionText().setText(actionText);
 		display.setActionEnabled(actionEnabled);
-		display.addMessage(LoginMessages.msg.sessionStateMessage(state.toString()));
+		display.addMessage(LoginMessages.msg.sessionStateMessage(status.toString()));
 		getState().setPageTitle(pageTitle);
 		getState().setPageTitleTooltip(pageTitle);
 		getState().setPageIcon(icon);
-		fireUserMessage(state);
+		fireUserMessage(status);
 	}
 }

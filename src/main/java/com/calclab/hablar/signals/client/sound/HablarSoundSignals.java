@@ -12,7 +12,7 @@ public class HablarSoundSignals {
 		eventBus.addHandler(UserMessageEvent.TYPE, new UserMessageHandler() {
 			@Override
 			public void onUserMessage(final UserMessageEvent event) {
-				SoundManager.play(SoundBundle.bundle.getClickSound().getUrl());
+				SoundManager.play(SoundBundle.bundle.getClickSound().getSafeUri().asString());
 			}
 		});
 	}

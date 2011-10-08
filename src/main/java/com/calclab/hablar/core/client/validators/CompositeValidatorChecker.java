@@ -67,11 +67,11 @@ public class CompositeValidatorChecker {
 		for (final ValueValidatorPair<?> pair : pairs) {
 			if (!pair.isValid()) {
 				errorText.setText(pair.validator.getMessage());
-				acceptEnabled.setState(false);
+				acceptEnabled.setState(Boolean.FALSE);
 				return;
 			}
 		}
 		errorText.setText("");
-		acceptEnabled.setState(true);
+		acceptEnabled.setState(Boolean.TRUE);
 	}
 }

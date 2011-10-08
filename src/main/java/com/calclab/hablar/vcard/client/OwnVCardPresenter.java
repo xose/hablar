@@ -2,16 +2,14 @@ package com.calclab.hablar.vcard.client;
 
 import java.util.List;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.emite.xep.vcard.client.VCard;
 import com.calclab.emite.xep.vcard.client.VCard.Data;
 import com.calclab.emite.xep.vcard.client.VCardEmail;
 import com.calclab.emite.xep.vcard.client.VCardManager;
-import com.calclab.emite.xep.vcard.client.events.VCardResponseEvent;
-import com.calclab.emite.xep.vcard.client.events.VCardResponseHandler;
+import com.calclab.emite.xep.vcard.client.VCardResponseEvent;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.icons.client.IconsBundle;
 import com.calclab.hablar.user.client.EditorPage;
@@ -35,11 +33,10 @@ public class OwnVCardPresenter extends VCardPage implements EditorPage<VCardDisp
 		display.setPageTitle(VCardMessages.msg.ownVCardTitle());
 		setLoading(true, VCardMessages.msg.waitingToLogin());
 
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
-
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				if (event.is(SessionStates.loggedIn)) {
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
+				if (event.is(SessionStatus.loggedIn)) {
 					requestVCard();
 				}
 			}
@@ -86,7 +83,7 @@ public class OwnVCardPresenter extends VCardPage implements EditorPage<VCardDisp
 
 		setLoading(true, VCardMessages.msg.waitingForOwnVCard());
 
-		vCardManager.requestOwnVCard(new VCardResponseHandler() {
+		vCardManager.requestOwnVCard(new VCardResponseEvent.Handler() {
 			@Override
 			public void onVCardResponse(final VCardResponseEvent event) {
 				storedVCard = event.getVCardResponse().getVCard();
@@ -125,7 +122,7 @@ public class OwnVCardPresenter extends VCardPage implements EditorPage<VCardDisp
 		final String jabberId = session.getCurrentUserURI().getJID().toString();
 		newVCard.setValue(Data.JABBERID, jabberId);
 
-		vCardManager.updateOwnVCard(newVCard, new VCardResponseHandler() {
+		vCardManager.updateOwnVCard(newVCard, new VCardResponseEvent.Handler() {
 			@Override
 			public void onVCardResponse(final VCardResponseEvent event) {
 				if (event.getVCardResponse().isSuccess()) {

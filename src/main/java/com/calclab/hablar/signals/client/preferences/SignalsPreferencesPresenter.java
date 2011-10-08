@@ -2,14 +2,12 @@ package com.calclab.hablar.signals.client.preferences;
 
 import java.util.List;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.IQ;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.IQ;
 import com.calclab.emite.xep.storage.client.PrivateStorageManager;
-import com.calclab.emite.xep.storage.client.events.PrivateStorageResponseEvent;
-import com.calclab.emite.xep.storage.client.events.PrivateStorageResponseHandler;
+import com.calclab.emite.xep.storage.client.PrivateStorageResponseEvent;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.PagePresenter;
 import com.calclab.hablar.signals.client.SignalMessages;
@@ -38,10 +36,10 @@ public class SignalsPreferencesPresenter extends PagePresenter<SignalsPreference
 
 		setLoading(true, SignalMessages.msg.waitingToSession());
 
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				if (SessionStates.isReady(event.getState())) {
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
+				if (SessionStatus.isReady(event.getStatus())) {
 					loadPreferences();
 				}
 			}
@@ -74,7 +72,7 @@ public class SignalsPreferencesPresenter extends PagePresenter<SignalsPreference
 
 	private void loadPreferences() {
 		setLoading(true, SignalMessages.msg.loadingPreferences());
-		storageManager.retrieve(StoredPreferences.empty, new PrivateStorageResponseHandler() {
+		storageManager.retrieve(StoredPreferences.empty, new PrivateStorageResponseEvent.Handler() {
 			@Override
 			public void onStorageResponse(PrivateStorageResponseEvent event) {
 				IQ parameter = event.getResponseIQ();
@@ -121,7 +119,7 @@ public class SignalsPreferencesPresenter extends PagePresenter<SignalsPreference
 					notificationManager.setNotifierActive(notifier, notifierSelected);
 				}
 
-				storageManager.store(storedPreferences, new PrivateStorageResponseHandler() {
+				storageManager.store(storedPreferences, new PrivateStorageResponseEvent.Handler() {
 					@Override
 					public void onStorageResponse(PrivateStorageResponseEvent event) {
 						IQ parameter = event.getResponseIQ();

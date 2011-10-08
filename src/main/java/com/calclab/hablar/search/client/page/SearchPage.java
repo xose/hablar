@@ -3,9 +3,9 @@ package com.calclab.hablar.search.client.page;
 import java.util.HashMap;
 import java.util.List;
 
-import com.calclab.emite.core.client.xmpp.session.ResultListener;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.xep.search.client.ResultListener;
 import com.calclab.emite.xep.search.client.SearchManager;
 import com.calclab.emite.xep.search.client.SearchResultItem;
 import com.calclab.hablar.core.client.Idify;

@@ -3,14 +3,12 @@ package com.calclab.hablar.user.client.presence;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.calclab.emite.core.client.xmpp.stanzas.IQ;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.IQ;
+import com.calclab.emite.core.client.stanzas.Presence;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
+import com.calclab.emite.im.client.events.OwnPresenceChangedEvent;
 import com.calclab.emite.im.client.presence.PresenceManager;
-import com.calclab.emite.im.client.presence.events.OwnPresenceChangedEvent;
-import com.calclab.emite.im.client.presence.events.OwnPresenceChangedHandler;
-import com.calclab.emite.xep.storage.client.events.PrivateStorageResponseEvent;
-import com.calclab.emite.xep.storage.client.events.PrivateStorageResponseHandler;
+import com.calclab.emite.xep.storage.client.PrivateStorageResponseEvent;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.PagePresenter;
 import com.calclab.hablar.core.client.ui.menu.Menu;
@@ -89,7 +87,7 @@ public class PresencePage extends PagePresenter<PresenceDisplay> implements Edit
 			}
 		});
 
-		presenceManager.addOwnPresenceChangedHandler(new OwnPresenceChangedHandler() {
+		presenceManager.addOwnPresenceChangedHandler(new OwnPresenceChangedEvent.Handler() {
 			@Override
 			public void onOwnPresenceChanged(final OwnPresenceChangedEvent event) {
 				final Presence presence = event.getCurrentPresence();
@@ -99,7 +97,7 @@ public class PresencePage extends PagePresenter<PresenceDisplay> implements Edit
 	}
 
 	private void addCustomPresenceActions() {
-		storedPresenceManager.get(new PrivateStorageResponseHandler() {
+		storedPresenceManager.get(new PrivateStorageResponseEvent.Handler() {
 			@Override
 			public void onStorageResponse(PrivateStorageResponseEvent event) {
 				IQ response = event.getResponseIQ();
@@ -159,7 +157,7 @@ public class PresencePage extends PagePresenter<PresenceDisplay> implements Edit
 	private void setPresence(final String status, final Show show) {
 		showPresence(status, show);
 		if (statusNotEmpty(status)) {
-			storedPresenceManager.add(status, show, new PrivateStorageResponseHandler() {
+			storedPresenceManager.add(status, show, new PrivateStorageResponseEvent.Handler() {
 				@Override
 				public void onStorageResponse(PrivateStorageResponseEvent event) {
 					IQ response = event.getResponseIQ();

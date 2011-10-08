@@ -1,7 +1,8 @@
 package com.calclab.hablar.console.client;
 
 import com.calclab.emite.core.client.conn.XmppConnection;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.services.Services;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.container.PageAddedEvent;
 import com.calclab.hablar.core.client.container.PageAddedHandler;
@@ -15,8 +16,8 @@ public class HablarConsole {
 
 	protected static final String ACTION_ID = "hablar-ConsoleAction";
 
-	public HablarConsole(final Hablar hablar, final XmppConnection connection, final XmppSession session) {
-		final ConsolePresenter loggerPage = new ConsolePresenter(connection, session, hablar.getEventBus(), new ConsoleWidget());
+	public HablarConsole(final Hablar hablar, final XmppConnection connection, final XmppSession session, final Services services) {
+		final ConsolePresenter loggerPage = new ConsolePresenter(connection, session, hablar.getEventBus(), new ConsoleWidget(), services);
 		hablar.addPage(loggerPage);
 
 		hablar.addPageAddedHandler(new PageAddedHandler() {

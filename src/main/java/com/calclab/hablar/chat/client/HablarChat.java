@@ -1,8 +1,8 @@
 package com.calclab.hablar.chat.client;
 
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.chatstate.client.StateManager;
+import com.calclab.emite.xep.chatstate.client.ChatStateManager;
 import com.calclab.hablar.chat.client.state.HablarChatStateManager;
 import com.calclab.hablar.chat.client.ui.PairChatPage;
 import com.calclab.hablar.chat.client.ui.PairChatPresenter;
@@ -15,7 +15,7 @@ import com.calclab.hablar.core.client.ui.emoticons.EmoticonsChatMessageFormatRep
 
 public class HablarChat {
 
-	public HablarChat(final Hablar hablar, final ChatConfig chatConfig, final XmppRoster roster, final ChatManager chatManager, final StateManager stateManager) {
+	public HablarChat(final Hablar hablar, final ChatConfig chatConfig, final XmppRoster roster, final PairChatManager chatManager, final ChatStateManager stateManager) {
         // Set up the message replacements
         ChatMessageFormatter.addReplacements(new StandardChatMessageFormatReplacements());
         

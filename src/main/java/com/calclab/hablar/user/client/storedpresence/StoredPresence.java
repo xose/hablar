@@ -3,7 +3,7 @@ package com.calclab.hablar.user.client.storedpresence;
 import com.calclab.emite.core.client.packet.DelegatedPacket;
 import com.calclab.emite.core.client.packet.IPacket;
 import com.calclab.emite.core.client.packet.Packet;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
 
 public class StoredPresence extends DelegatedPacket {
 

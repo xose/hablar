@@ -1,14 +1,14 @@
 package com.calclab.hablar.chat.client.ui;
 
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
-import com.calclab.emite.im.client.chat.Chat;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
+import com.calclab.emite.im.client.chat.pair.PairChat;
 import com.calclab.hablar.core.client.ui.menu.Action;
 
 public interface PairChatPage extends ChatPage {
 
 	void addAction(Action<PairChatPage> action);
 
-	Chat getChat();
+	PairChat getChat();
 
 	String getChatName();
 

@@ -3,16 +3,14 @@ package com.calclab.hablar.chat.client;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.Chat;
-import com.calclab.emite.im.client.chat.ChatManager;
-import com.calclab.emite.im.client.chat.events.ChatChangedEvent;
-import com.calclab.emite.im.client.chat.events.ChatChangedHandler;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.chat.pair.PairChat;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
+import com.calclab.emite.im.client.events.PairChatChangedEvent;
+import com.calclab.emite.im.client.events.RosterItemChangedEvent;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedEvent;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedHandler;
 import com.calclab.hablar.chat.client.ui.ChatDisplay;
 import com.calclab.hablar.chat.client.ui.ChatWidget;
 import com.calclab.hablar.chat.client.ui.PairChatPage;
@@ -45,10 +43,10 @@ public class HablarChatManager {
 		 *            whether the "Send" button should be visible.
 		 * @return the ChatDisplay instance.
 		 */
-		PairChatPresenter create(HablarEventBus eventBus, Chat chat, ChatDisplay display);
+		PairChatPresenter create(HablarEventBus eventBus, PairChat chat, ChatDisplay display);
 	}
 
-	private final HashMap<Chat, PairChatPage> chatPages;
+	private final HashMap<PairChat, PairChatPage> chatPages;
 
 	private final ChatPageFactory chatPageFactory;
 	private final PairChatPresenterFactory chatPresenterFactory;
@@ -58,7 +56,7 @@ public class HablarChatManager {
 
 	private final XmppRoster roster;
 
-	public HablarChatManager(final XmppRoster roster, final ChatManager chatManager, final Hablar hablar, final ChatConfig config) {
+	public HablarChatManager(final XmppRoster roster, final PairChatManager chatManager, final Hablar hablar, final ChatConfig config) {
 		this(roster, chatManager, hablar, config, new ChatPageFactory() {
 			@Override
 			public ChatDisplay create(final boolean sendButtonVisible) {
@@ -67,29 +65,29 @@ public class HablarChatManager {
 		}, new PairChatPresenterFactory() {
 
 			@Override
-			public PairChatPresenter create(final HablarEventBus eventBus, final Chat chat, final ChatDisplay display) {
+			public PairChatPresenter create(final HablarEventBus eventBus, final PairChat chat, final ChatDisplay display) {
 				return new PairChatPresenter(roster, eventBus, chat, display);
 			}
 		});
 	}
 
-	public HablarChatManager(final XmppRoster roster, final ChatManager chatManager, final Hablar hablarPresenter, final ChatConfig config,
+	public HablarChatManager(final XmppRoster roster, final PairChatManager chatManager, final Hablar hablarPresenter, final ChatConfig config,
 			final ChatPageFactory chatPageFactory, final PairChatPresenterFactory chatPresenterFactory) {
 		this.roster = roster;
 		hablar = hablarPresenter;
 
 		this.chatPageFactory = chatPageFactory;
 		this.chatPresenterFactory = chatPresenterFactory;
-		chatPages = new HashMap<Chat, PairChatPage>();
+		chatPages = new HashMap<PairChat, PairChatPage>();
 
 		if (config.openChat != null) {
 			chatManager.open(config.openChat);
 		}
 
-		chatManager.addChatChangedHandler(new ChatChangedHandler() {
+		chatManager.addPairChatChangedHandler(new PairChatChangedEvent.Handler() {
 
 			@Override
-			public void onChatChanged(final ChatChangedEvent event) {
+			public void onPairChatChanged(final PairChatChangedEvent event) {
 				if (event.isCreated()) {
 					createChat(event.getChat(), Visibility.notFocused);
 				}
@@ -110,13 +108,13 @@ public class HablarChatManager {
 			}
 		});
 
-		roster.addRosterItemChangedHandler(new RosterItemChangedHandler() {
+		roster.addRosterItemChangedHandler(new RosterItemChangedEvent.Handler() {
 
 			@Override
 			public void onRosterItemChanged(final RosterItemChangedEvent event) {
 				if (event.isModified()) {
 					final XmppURI jid = event.getRosterItem().getJID();
-					for (final Entry<Chat, PairChatPage> entry : chatPages.entrySet()) {
+					for (final Entry<PairChat, PairChatPage> entry : chatPages.entrySet()) {
 						if (entry.getKey().getURI().equalsNoResource(jid)) {
 							entry.getValue().setPresence(event.getRosterItem().isAvailable(), event.getRosterItem().getShow());
 						}
@@ -129,7 +127,7 @@ public class HablarChatManager {
 
 	}
 
-	private void createChat(final Chat chat, final Visibility visibility) {
+	private void createChat(final PairChat chat, final Visibility visibility) {
 		final ChatDisplay display = chatPageFactory.create(sendButtonVisible);
 		final PairChatPresenter presenter = chatPresenterFactory.create(hablar.getEventBus(), chat, display);
 		chatPages.put(chat, presenter);

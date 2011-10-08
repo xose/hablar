@@ -1,8 +1,7 @@
 package com.calclab.hablar.roster.client.groups;
 
+import com.calclab.emite.im.client.events.RosterItemChangedEvent;
 import com.calclab.emite.im.client.roster.RosterGroup;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedEvent;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedHandler;
 import com.calclab.hablar.core.client.mvp.Presenter;
 import com.calclab.hablar.core.client.ui.menu.Menu;
 import com.calclab.hablar.roster.client.RosterMessages;
@@ -38,7 +37,7 @@ public class GroupHeaderPresenter implements Presenter<GroupHeaderDisplay> {
 			}
 		});
 
-		group.addRosterItemChangedHandler(new RosterItemChangedHandler() {
+		group.addRosterItemChangedHandler(new RosterItemChangedEvent.Handler() {
 			@Override
 			public void onRosterItemChanged(final RosterItemChangedEvent event) {
 				if (event.isAdded() || event.isRemoved()) {

@@ -2,9 +2,9 @@ package com.calclab.hablar.rooms.client.existing;
 
 import java.util.List;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.emite.xep.mucdisco.client.ExistingRoom;
 import com.calclab.emite.xep.mucdisco.client.ExistingRoomsCallback;
 import com.calclab.emite.xep.mucdisco.client.RoomDiscoveryManager;
@@ -18,10 +18,10 @@ public class OpenExistingRoomPresenter extends PagePresenter<OpenExistingRoomDis
 	public static final String TYPE = "OpenExistingRoom";
 	private final String roomsService;
 	private final XmppSession session;
-	private final RoomManager roomManager;
+	private final RoomChatManager roomManager;
 	private final RoomDiscoveryManager roomDiscoveryManager;
 
-	public OpenExistingRoomPresenter(final XmppSession session, final RoomManager roomManager, final RoomDiscoveryManager roomDiscoveryManager,
+	public OpenExistingRoomPresenter(final XmppSession session, final RoomChatManager roomManager, final RoomDiscoveryManager roomDiscoveryManager,
 			final String roomsService, final HablarEventBus eventBus, final OpenExistingRoomDisplay display) {
 		super(TYPE, eventBus, display);
 		this.session = session;

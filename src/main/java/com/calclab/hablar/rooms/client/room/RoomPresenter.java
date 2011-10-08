@@ -2,17 +2,16 @@ package com.calclab.hablar.rooms.client.room;
 
 import java.util.Date;
 
-import com.calclab.emite.core.client.events.MessageEvent;
-import com.calclab.emite.core.client.events.MessageHandler;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.Message;
-import com.calclab.emite.im.client.chat.ChatStates;
+import com.calclab.emite.core.client.events.MessageReceivedEvent;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.Message;
+import com.calclab.emite.im.client.chat.ChatStatus;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.emite.xep.delay.client.Delay;
 import com.calclab.emite.xep.delay.client.DelayHelper;
 import com.calclab.emite.xep.muc.client.Occupant;
-import com.calclab.emite.xep.muc.client.Room;
+import com.calclab.emite.xep.muc.client.RoomChat;
 import com.calclab.hablar.chat.client.ui.ChatMessage;
 import com.calclab.hablar.chat.client.ui.ChatPresenter;
 import com.calclab.hablar.chat.client.ui.ColorHelper;
@@ -35,9 +34,9 @@ public class RoomPresenter extends ChatPresenter implements RoomPage {
 	public static final String ROOM_MESSAGE = "RoomMessage";
 	private static int id = 0;
 
-	private final Room room;
+	private final RoomChat room;
 
-	public RoomPresenter(final XmppSession session, final XmppRoster roster, final HablarEventBus eventBus, final Room room, final RoomDisplay display) {
+	public RoomPresenter(final XmppSession session, final XmppRoster roster, final HablarEventBus eventBus, final RoomChat room, final RoomDisplay display) {
 		super(TYPE, "" + ++id, eventBus, room, display);
 		this.room = room;
 		display.setId(getId());
@@ -52,10 +51,10 @@ public class RoomPresenter extends ChatPresenter implements RoomPage {
 		model.setCloseConfirmationMessage(RoomMessages.msg.confirmCloseRoom());
 		model.setCloseConfirmationTitle(RoomMessages.msg.confirmCloseRoomTitle(roomName));
 
-		room.addMessageReceivedHandler(new MessageHandler() {
+		room.addMessageReceivedHandler(new MessageReceivedEvent.Handler() {
 
 			@Override
-			public void onMessage(final MessageEvent event) {
+			public void onMessageReceived(final MessageReceivedEvent event) {
 				final Message message = event.getMessage();
 
 				final String from;
@@ -97,7 +96,7 @@ public class RoomPresenter extends ChatPresenter implements RoomPage {
 			}
 		});
 
-		if (ChatStates.locked.equals(room.getChatState())) {
+		if (ChatStatus.locked.equals(room.getStatus())) {
 			addMessage(new ChatMessage(RoomMessages.msg.waitingForUnlockRoom()));
 		}
 
@@ -136,7 +135,7 @@ public class RoomPresenter extends ChatPresenter implements RoomPage {
 	}
 
 	@Override
-	public Room getRoom() {
+	public RoomChat getRoom() {
 		return room;
 	}
 

@@ -1,10 +1,9 @@
 package com.calclab.hablar.chat.client.state;
 
+import com.calclab.emite.xep.chatstate.client.ChatStateChangedEvent;
+import com.calclab.emite.xep.chatstate.client.ChatStateHook;
+import com.calclab.emite.xep.chatstate.client.ChatStateHook.ChatState;
 import com.calclab.emite.xep.chatstate.client.ChatStateManager;
-import com.calclab.emite.xep.chatstate.client.ChatStateManager.ChatState;
-import com.calclab.emite.xep.chatstate.client.StateManager;
-import com.calclab.emite.xep.chatstate.client.events.ChatStateNotificationEvent;
-import com.calclab.emite.xep.chatstate.client.events.ChatStateNotificationHandler;
 import com.calclab.hablar.chat.client.ChatMessages;
 import com.calclab.hablar.chat.client.ui.PairChatPage;
 import com.google.gwt.user.client.ui.HasText;
@@ -28,12 +27,12 @@ public class HablarChatStateManager {
 		}
 	}
 
-	public HablarChatStateManager(final StateManager manager, final PairChatPage page) {
-		final ChatStateManager chatState = manager.getChatState(page.getChat());
+	public HablarChatStateManager(final ChatStateManager manager, final PairChatPage page) {
+		final ChatStateHook chatState = manager.getChatState(page.getChat());
 
-		chatState.addChatStateNotificationHandler(new ChatStateNotificationHandler() {
+		chatState.addChatStateChangedHandler(new ChatStateChangedEvent.Handler() {
 			@Override
-			public void onChatStateChanged(final ChatStateNotificationEvent event) {
+			public void onChatStateChanged(final ChatStateChangedEvent event) {
 				final ChatState state = event.getChatState();
 				final HasText stateDisplay = page.getDisplay().getState();
 				stateDisplay.setText(HablarChatStateManager.getStateText(state, page.getChatName()));

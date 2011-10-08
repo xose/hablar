@@ -2,7 +2,7 @@ package com.calclab.hablar.roster.client;
 
 import java.util.Collection;
 
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
@@ -24,9 +24,9 @@ public class RosterBasicActions {
 	private final XmppRoster roster;
 	private final HablarEventBus eventBus;
 	private Action<RosterItem> rosterClickAction;
-	private final ChatManager chatManager;
+	private final PairChatManager chatManager;
 
-	public RosterBasicActions(final XmppRoster roster, final ChatManager chatManager, final HablarEventBus eventBus) {
+	public RosterBasicActions(final XmppRoster roster, final PairChatManager chatManager, final HablarEventBus eventBus) {
 		this.roster = roster;
 		this.chatManager = chatManager;
 		this.eventBus = eventBus;

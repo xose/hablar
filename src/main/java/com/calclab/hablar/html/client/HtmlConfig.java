@@ -1,21 +1,15 @@
 package com.calclab.hablar.html.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
 
 public class HtmlConfig {
 
     public static HtmlConfig getFromMeta() {
 	final HtmlConfig config = new HtmlConfig();
-	config.hasLogin = PageAssist.isMetaTrue("hablar.login");
-	config.inline = PageAssist.getMeta("hablar.inline");
-	config.width = PageAssist.getMeta("hablar.width");
-	config.height = PageAssist.getMeta("hablar.height");
-	if (config.width == null) {
-	    config.width = "400px";
-	}
-	if (config.height == null) {
-	    config.height = "400px";
-	}
+	config.hasLogin = PageAssist.getMetaBoolean("hablar.login", false);
+	config.inline = PageAssist.getMetaString("hablar.inline", null);
+	config.width = PageAssist.getMetaString("hablar.width", "100%");
+	config.height = PageAssist.getMetaString("hablar.height", "100%");
 	return config;
     }
 

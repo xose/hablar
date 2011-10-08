@@ -3,11 +3,10 @@ package com.calclab.hablar.chat.client.ui;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.stanzas.Message;
+import com.calclab.emite.core.client.stanzas.Message;
 import com.calclab.emite.im.client.chat.Chat;
-import com.calclab.emite.im.client.chat.ChatStates;
+import com.calclab.emite.im.client.chat.ChatStatus;
+import com.calclab.emite.im.client.events.ChatStatusChangedEvent;
 import com.calclab.hablar.core.client.browser.BrowserFocusHandler;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.PagePresenter;
@@ -40,10 +39,10 @@ public class ChatPresenter extends PagePresenter<ChatDisplay> implements ChatPag
 			}
 		});
 
-		chat.addChatStateChangedHandler(true, new StateChangedHandler() {
+		chat.addChatStatusChangedHandler(true, new ChatStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				setState(event.getState());
+			public void onChatStatusChanged(final ChatStatusChangedEvent event) {
+				setStatus(event.getStatus());
 			}
 		});
 	}
@@ -87,8 +86,8 @@ public class ChatPresenter extends PagePresenter<ChatDisplay> implements ChatPag
 		}
 	}
 
-	protected void setState(final String chatState) {
-		final boolean visible = ChatStates.ready.equals(chatState);
+	protected void setStatus(final ChatStatus chatState) {
+		final boolean visible = ChatStatus.ready.equals(chatState);
 		display.setControlsVisible(visible);
 		display.setStatusVisible(visible);
 	}

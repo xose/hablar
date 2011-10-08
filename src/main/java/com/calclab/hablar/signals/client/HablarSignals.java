@@ -1,6 +1,6 @@
 package com.calclab.hablar.signals.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.emite.xep.storage.client.PrivateStorageManager;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.browser.BrowserFocusHandler;

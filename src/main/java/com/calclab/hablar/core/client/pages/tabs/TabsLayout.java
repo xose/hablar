@@ -13,7 +13,7 @@ public class TabsLayout extends MainLayout {
 	public static class TabHeaderSize {
 		public static TabHeaderSize DEFAULT_SIZE = new TabHeaderSize("23px", "120px", 10);
 
-		public static TabHeaderSize create(final String height, final String width, final Integer trim) {
+		public static TabHeaderSize create(final String height, final String width, final int trim) {
 			final TabHeaderSize retValue = DEFAULT_SIZE.createCopy();
 			if (height != null) {
 				retValue.height = height;
@@ -21,9 +21,7 @@ public class TabsLayout extends MainLayout {
 			if (width != null) {
 				retValue.width = width;
 			}
-			if (trim != null) {
-				retValue.trim = trim;
-			}
+			retValue.trim = trim;
 			return retValue;
 		}
 

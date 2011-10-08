@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.calclab.emite.core.client.packet.IPacket;
 import com.calclab.emite.core.client.packet.MatcherFactory;
-import com.calclab.emite.core.client.xmpp.stanzas.IQ;
+import com.calclab.emite.core.client.stanzas.IQ;
 import com.calclab.emite.xep.storage.client.SimpleStorageData;
 
 /**

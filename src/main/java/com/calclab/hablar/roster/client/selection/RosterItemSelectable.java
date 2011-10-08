@@ -1,6 +1,6 @@
 package com.calclab.hablar.roster.client.selection;
 
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.hablar.core.client.ui.selectionlist.Selectable;
 import com.calclab.hablar.roster.client.groups.RosterItemDisplay;

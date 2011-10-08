@@ -1,8 +1,8 @@
 package com.calclab.hablar.rooms.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.emite.xep.mucchatstate.client.MUCChatStateManager;
 import com.calclab.emite.xep.mucdisco.client.RoomDiscoveryManager;
 import com.calclab.hablar.core.client.Hablar;
@@ -29,7 +29,7 @@ public class HablarRooms {
 	private static final String ACTION_ID_OPENEXISTINGROOM = "HablarRooms-openExistingRoom";
 
 	@Inject
-	public HablarRooms(final Hablar hablar, final HablarRoomsConfig config, final XmppSession session, final XmppRoster roster, final RoomManager roomManager,
+	public HablarRooms(final Hablar hablar, final HablarRoomsConfig config, final XmppSession session, final XmppRoster roster, final RoomChatManager roomManager,
 			final RoomDiscoveryManager roomDiscoveryManager, final MUCChatStateManager mucChatStateManager) {
 		new HablarRoomManager(session, roster, roomManager, hablar, config);
 

@@ -1,7 +1,7 @@
 package com.calclab.hablar.openchat.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.container.PageAddedEvent;
@@ -29,9 +29,9 @@ public class HablarOpenChat {
 	private final Hablar hablar;
 	private final XmppSession session;
 	private final XmppRoster roster;
-	private final ChatManager chatManager;
+	private final PairChatManager chatManager;
 
-	public HablarOpenChat(final Hablar hablar, final XmppSession session, final XmppRoster roster, final ChatManager chatManager) {
+	public HablarOpenChat(final Hablar hablar, final XmppSession session, final XmppRoster roster, final PairChatManager chatManager) {
 		this.hablar = hablar;
 		this.session = session;
 		this.roster = roster;

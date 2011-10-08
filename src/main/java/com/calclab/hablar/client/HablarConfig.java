@@ -1,6 +1,6 @@
 package com.calclab.hablar.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
 import com.calclab.hablar.chat.client.ChatConfig;
 import com.calclab.hablar.core.client.HablarDisplay;
 import com.calclab.hablar.core.client.pages.tabs.TabsLayout;
@@ -14,16 +14,10 @@ import com.calclab.hablar.vcard.client.VCardConfig;
 public class HablarConfig {
 
 	private static void createTabHeaderSize(final HablarConfig config) {
-		Integer trim = null;
-		final String trimString = PageAssist.getMeta("hablar.tabHeaderTrim");
-		if (trimString != null) {
-			try {
-				trim = Integer.decode(trimString);
-			} catch (final NumberFormatException e) {
-				// Ignore it.
-			}
-		}
-		config.tabHeaderSize = TabHeaderSize.create(PageAssist.getMeta("hablar.tabHeaderHeight"), PageAssist.getMeta("hablar.tabHeaderWidth"), trim);
+		final String height = PageAssist.getMetaString("hablar.tabHeaderHeight", "23px");
+		final String width = PageAssist.getMetaString("hablar.tabHeaderWidth", "120px");
+		final int trim = PageAssist.getMetaInteger("hablar.tabHeaderTrim", 10);
+		config.tabHeaderSize = TabHeaderSize.create(height, width, trim);
 	}
 
 	/**
@@ -32,17 +26,17 @@ public class HablarConfig {
 	public static HablarConfig getFromMeta() {
 		final HablarConfig config = new HablarConfig();
 
-		config.hasRoster = PageAssist.isMetaTrue("hablar.roster");
-		config.hasSearch = PageAssist.isMetaTrue("hablar.search");
-		config.hasSignals = PageAssist.isMetaTrue("hablar.hasSignals");
-		config.hasChat = PageAssist.isMetaTrue("hablar.hasChats");
-		config.hasVCard = PageAssist.isMetaTrue("hablar.hasVCard");
-		config.hasCopyToClipboard = PageAssist.isMetaTrue("hablar.hasCopyToClipboard");
-		config.hasSound = PageAssist.isMetaTrue("hablar.hasSound");
+		config.hasRoster = PageAssist.getMetaBoolean("hablar.roster", true);
+		config.hasSearch = PageAssist.getMetaBoolean("hablar.search", true);
+		config.hasSignals = PageAssist.getMetaBoolean("hablar.hasSignals", true);
+		config.hasChat = PageAssist.getMetaBoolean("hablar.hasChats", true);
+		config.hasVCard = PageAssist.getMetaBoolean("hablar.hasVCard", true);
+		config.hasCopyToClipboard = PageAssist.getMetaBoolean("hablar.hasCopyToClipboard", true);
+		config.hasSound = PageAssist.getMetaBoolean("hablar.hasSound", true);
 
-		config.dockRoster = PageAssist.getMeta("hablar.dockRoster");
+		config.dockRoster = PageAssist.getMetaString("hablar.dockRoster", "left");
 
-		final String layout = PageAssist.getMeta("hablar.layout");
+		final String layout = PageAssist.getMetaString("hablar.layout", null);
 		if ("tabs".equals(layout)) {
 			config.layout = HablarDisplay.Layout.tabs;
 		} else {

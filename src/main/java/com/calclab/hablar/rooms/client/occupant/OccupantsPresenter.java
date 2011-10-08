@@ -1,9 +1,8 @@
 package com.calclab.hablar.rooms.client.occupant;
 
 import com.calclab.emite.xep.muc.client.Occupant;
-import com.calclab.emite.xep.muc.client.Room;
-import com.calclab.emite.xep.muc.client.events.OccupantChangedEvent;
-import com.calclab.emite.xep.muc.client.events.OccupantChangedHandler;
+import com.calclab.emite.xep.muc.client.OccupantChangedEvent;
+import com.calclab.emite.xep.muc.client.RoomChat;
 import com.calclab.hablar.core.client.mvp.Presenter;
 import com.calclab.hablar.icons.client.IconsBundle;
 import com.calclab.hablar.rooms.client.RoomMessages;
@@ -21,12 +20,12 @@ public class OccupantsPresenter implements Presenter<OccupantsDisplay> {
 	private final OccupantsDisplay display;
 	private int occupantsCount;
 
-	public OccupantsPresenter(final Room room, final OccupantsDisplay display) {
+	public OccupantsPresenter(final RoomChat room, final OccupantsDisplay display) {
 		this.display = display;
 		occupantsCount = 0;
 		updateOccupants(room);
 
-		room.addOccupantChangedHandler(new OccupantChangedHandler() {
+		room.addOccupantChangedHandler(new OccupantChangedEvent.Handler() {
 			@Override
 			public void onOccupantChanged(final OccupantChangedEvent event) {
 				if (event.isAdded()) {
@@ -54,7 +53,7 @@ public class OccupantsPresenter implements Presenter<OccupantsDisplay> {
 		});
 	}
 
-	private void addOccupantsToPanel(final Room room) {
+	private void addOccupantsToPanel(final RoomChat room) {
 		for (final Occupant occupant : room.getOccupants()) {
 			final OccupantDisplay ocDisplay = display.addOccupant();
 			ocDisplay.getName().setText(occupant.getNick());
@@ -67,7 +66,7 @@ public class OccupantsPresenter implements Presenter<OccupantsDisplay> {
 		return display;
 	}
 
-	private void updateOccupants(final Room room) {
+	private void updateOccupants(final RoomChat room) {
 		final HasText label = display.getLabel();
 		label.setText(RoomMessages.msg.occupants(occupantsCount));
 		display.clearPanel();

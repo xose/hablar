@@ -5,12 +5,11 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.events.RosterItemChangedEvent;
 import com.calclab.emite.im.client.roster.RosterGroup;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.RosterItemsOrder;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedEvent;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedHandler;
 import com.calclab.hablar.core.client.Idify;
 import com.calclab.hablar.core.client.mvp.Presenter;
 import com.calclab.hablar.core.client.ui.menu.Menu;
@@ -52,7 +51,7 @@ public class RosterGroupPresenter implements Presenter<RosterGroupDisplay> {
 
 		display.setVisible(group.isAllContacts());
 
-		group.addRosterItemChangedHandler(new RosterItemChangedHandler() {
+		group.addRosterItemChangedHandler(new RosterItemChangedEvent.Handler() {
 
 			@Override
 			public void onRosterItemChanged(final RosterItemChangedEvent event) {

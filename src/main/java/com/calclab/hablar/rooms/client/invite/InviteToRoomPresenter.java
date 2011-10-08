@@ -6,7 +6,7 @@ import java.util.Set;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.emite.xep.muc.client.Occupant;
-import com.calclab.emite.xep.muc.client.Room;
+import com.calclab.emite.xep.muc.client.RoomChat;
 import com.calclab.hablar.client.HablarMessages;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.rooms.client.RoomMessages;
@@ -17,7 +17,7 @@ import com.calclab.hablar.rooms.client.open.EditRoomPresenter;
 public class InviteToRoomPresenter extends EditRoomPresenter {
 	public static final String TYPE = "InviteToRoom";
 
-	private Room room;
+	private RoomChat room;
 	private final XmppRoster roster;
 
 	public InviteToRoomPresenter(final XmppRoster roster, final HablarEventBus eventBus, final EditRoomDisplay display) {
@@ -54,7 +54,7 @@ public class InviteToRoomPresenter extends EditRoomPresenter {
 		}
 	}
 
-	public void setRoom(final Room room) {
+	public void setRoom(final RoomChat room) {
 		this.room = room;
 	}
 }

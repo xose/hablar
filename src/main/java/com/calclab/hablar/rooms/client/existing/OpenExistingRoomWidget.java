@@ -2,7 +2,7 @@ package com.calclab.hablar.rooms.client.existing;
 
 import java.util.List;
 
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 import com.calclab.emite.xep.mucdisco.client.ExistingRoom;
 import com.calclab.hablar.core.client.ui.selectionlist.Selectable;
 import com.calclab.hablar.core.client.ui.selectionlist.SelectionList;

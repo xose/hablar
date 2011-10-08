@@ -1,10 +1,9 @@
 package com.calclab.hablar.rooms.client.state;
 
-import com.calclab.emite.xep.muc.client.Room;
+import com.calclab.emite.xep.muc.client.RoomChat;
 import com.calclab.emite.xep.mucchatstate.client.MUCChatStateManager;
 import com.calclab.emite.xep.mucchatstate.client.RoomChatStateManager;
-import com.calclab.emite.xep.mucchatstate.client.events.RoomChatStateNotificationEvent;
-import com.calclab.emite.xep.mucchatstate.client.events.RoomChatStateNotificationHandler;
+import com.calclab.emite.xep.mucchatstate.client.RoomChatStateNotificationEvent;
 import com.calclab.hablar.chat.client.state.HablarChatStateManager;
 import com.calclab.hablar.rooms.client.room.RoomPresenter;
 import com.google.gwt.user.client.ui.HasText;
@@ -15,10 +14,10 @@ import com.google.gwt.user.client.ui.HasText;
 public class HablarRoomStateManager {
 
 	public HablarRoomStateManager(final MUCChatStateManager manager, final RoomPresenter roomPage) {
-		final Room room = roomPage.getRoom();
+		final RoomChat room = roomPage.getRoom();
 		final RoomChatStateManager occupantsStateManager = manager.getRoomOccupantsChatStateManager(room);
 
-		occupantsStateManager.addRoomChatStateNotificationHandler(new RoomChatStateNotificationHandler() {
+		occupantsStateManager.addRoomChatStateNotificationHandler(new RoomChatStateNotificationEvent.Handler() {
 			@Override
 			public void onRoomChatStateNotification(final RoomChatStateNotificationEvent event) {
 				final HasText stateDisplay = roomPage.getDisplay().getState();

@@ -1,13 +1,13 @@
 package com.calclab.hablar.rooms.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
 
 public class HablarRoomsConfig {
 
 	public static HablarRoomsConfig getFromMeta() {
 		final HablarRoomsConfig config = new HablarRoomsConfig();
-		config.roomsService = PageAssist.getMeta("hablar.roomService");
-		config.sendButtonVisible = PageAssist.isMetaTrue("hablar.sendButton");
+		config.roomsService = PageAssist.getMetaString("hablar.roomService", null);
+		config.sendButtonVisible = PageAssist.getMetaBoolean("hablar.sendButton", true);
 		return config;
 	}
 

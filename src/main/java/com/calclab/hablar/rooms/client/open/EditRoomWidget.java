@@ -68,7 +68,7 @@ public class EditRoomWidget extends Composite implements EditRoomDisplay {
 		return new HasState<Boolean>() {
 			@Override
 			public void setState(final Boolean state) {
-				accept.setEnabled(state);
+				accept.setEnabled(state.booleanValue());
 			}
 		};
 	}

@@ -1,16 +1,14 @@
 package com.calclab.hablar.vcard.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.events.RosterItemChangedEvent;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedEvent;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedHandler;
 import com.calclab.emite.xep.vcard.client.VCard;
 import com.calclab.emite.xep.vcard.client.VCardManager;
 import com.calclab.emite.xep.vcard.client.VCardResponse;
-import com.calclab.emite.xep.vcard.client.events.VCardResponseEvent;
-import com.calclab.emite.xep.vcard.client.events.VCardResponseHandler;
+import com.calclab.emite.xep.vcard.client.VCardResponseEvent;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.container.PageAddedEvent;
 import com.calclab.hablar.core.client.container.PageAddedHandler;
@@ -75,7 +73,7 @@ public class HablarVCard {
 
 	private void prepareDefaultNicknameListener() {
 
-		roster.addRosterItemChangedHandler(new RosterItemChangedHandler() {
+		roster.addRosterItemChangedHandler(new RosterItemChangedEvent.Handler() {
 
 			@Override
 			public void onRosterItemChanged(final RosterItemChangedEvent event) {
@@ -85,7 +83,7 @@ public class HablarVCard {
 					final XmppURI jid = rosterItem.getJID();
 					if ((itemName == null) || "".equals(itemName) || itemName.equals(jid.getNode())) {
 
-						vCardManager.getUserVCard(jid, new VCardResponseHandler() {
+						vCardManager.getUserVCard(jid, new VCardResponseEvent.Handler() {
 							@Override
 							public void onVCardResponse(final VCardResponseEvent event) {
 								final VCardResponse vCardResponse = event.getVCardResponse();

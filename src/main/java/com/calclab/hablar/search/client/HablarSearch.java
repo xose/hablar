@@ -1,11 +1,10 @@
 package com.calclab.hablar.search.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
+import com.calclab.emite.im.client.events.RosterRetrievedEvent;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.im.client.roster.events.RosterRetrievedEvent;
-import com.calclab.emite.im.client.roster.events.RosterRetrievedHandler;
 import com.calclab.emite.xep.search.client.SearchManager;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.container.PageAddedEvent;
@@ -27,7 +26,7 @@ public class HablarSearch {
 	protected static final String ACTION_ID = "HablarLogic-searchAction";
 
 	public HablarSearch(final Hablar hablar, final SearchConfig searchConfig, final XmppSession session, final XmppRoster roster,
-			final ChatManager chatManager, final SearchManager searchManager) {
+			final PairChatManager chatManager, final SearchManager searchManager) {
 
 		searchManager.setHost(XmppURI.uri(null, searchConfig.searchService, null));
 		final Visibility visible = searchConfig.searchOnRoster ? Visibility.hidden : Visibility.notFocused;
@@ -45,7 +44,7 @@ public class HablarSearch {
 			addSearchActionToRoster(hablar, searchPage);
 		}
 		if (searchConfig.showSearchPageOnEmptyRoster) {
-			roster.addRosterRetrievedHandler(new RosterRetrievedHandler() {
+			roster.addRosterRetrievedHandler(new RosterRetrievedEvent.Handler() {
 				@Override
 				public void onRosterRetrieved(final RosterRetrievedEvent event) {
 					if (event.getRosterItems().isEmpty()) {

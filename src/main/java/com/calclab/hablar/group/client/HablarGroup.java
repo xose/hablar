@@ -1,6 +1,6 @@
 package com.calclab.hablar.group.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.container.PageAddedEvent;

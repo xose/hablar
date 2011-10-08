@@ -24,7 +24,7 @@ public class SelectRosterItemPresenter {
 	}
 
 	public boolean isSelected() {
-		return display.getSelected().getValue();
+		return display.getSelected().getValue().booleanValue();
 	}
 
 	public void setEnabled(final boolean enabled) {

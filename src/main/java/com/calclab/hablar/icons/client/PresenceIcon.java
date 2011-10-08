@@ -1,6 +1,6 @@
 package com.calclab.hablar.icons.client;
 
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
 import com.google.gwt.resources.client.ImageResource;
 
 public class PresenceIcon {

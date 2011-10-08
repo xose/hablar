@@ -1,9 +1,10 @@
 package com.calclab.hablar.html.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.services.Services;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.hablar.chat.client.HablarChat;
 import com.calclab.hablar.client.HablarConfig;
 import com.calclab.hablar.client.HablarGinjector;
@@ -74,11 +75,12 @@ public class HablarHtml implements EntryPoint {
 
 		final XmppSession session = ginjector.getXmppSession();
 		final XmppRoster roster = ginjector.getXmppRoster();
-		final ChatManager chatManager = ginjector.getChatManager();
-		final RoomManager roomManager = ginjector.getRoomManager();
+		final PairChatManager chatManager = ginjector.getPairChatManager();
+		final RoomChatManager roomManager = ginjector.getRoomChatManager();
+		final Services services = ginjector.getServices();
 
 		new HablarCore(hablar);
-		new HablarChat(hablar, config.chatConfig, roster, chatManager, ginjector.getStateManager());
+		new HablarChat(hablar, config.chatConfig, roster, chatManager, ginjector.getChatStateManager());
 		new HablarRooms(hablar, config.roomsConfig, session, roster, roomManager, ginjector.getRoomDiscoveryManager(), ginjector.getMUCChatStateManager());
 		new HablarGroupChat(hablar, config.roomsConfig, session, roster, chatManager, roomManager);
 		new HablarDock(hablar, config.dockConfig);
@@ -120,7 +122,7 @@ public class HablarHtml implements EntryPoint {
 		}
 
 		if (htmlConfig.hasLogger) {
-			new HablarConsole(hablar, ginjector.getXmppConnection(), session);
+			new HablarConsole(hablar, ginjector.getXmppConnection(), session, services);
 		}
 
 		if (htmlConfig.hasLogin) {

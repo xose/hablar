@@ -1,14 +1,14 @@
 package com.calclab.hablar.client;
 
-import com.calclab.emite.browser.client.BrowserModule;
 import com.calclab.emite.core.client.conn.XmppConnection;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.services.Services;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.presence.PresenceManager;
 import com.calclab.emite.im.client.roster.SubscriptionHandler;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.chatstate.client.StateManager;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.xep.chatstate.client.ChatStateManager;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.emite.xep.mucchatstate.client.MUCChatStateManager;
 import com.calclab.emite.xep.mucdisco.client.RoomDiscoveryManager;
 import com.calclab.emite.xep.search.client.SearchManager;
@@ -17,7 +17,7 @@ import com.calclab.emite.xep.vcard.client.VCardManager;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 
-@GinModules({ HablarModule.class, BrowserModule.class })
+@GinModules({ HablarModule.class })
 public interface HablarGinjector extends Ginjector {
 
 	XmppConnection getXmppConnection();
@@ -25,12 +25,14 @@ public interface HablarGinjector extends Ginjector {
 	XmppSession getXmppSession();
 
 	XmppRoster getXmppRoster();
+	
+	Services getServices();
 
-	ChatManager getChatManager();
+	PairChatManager getPairChatManager();
 
-	RoomManager getRoomManager();
+	RoomChatManager getRoomChatManager();
 
-	StateManager getStateManager();
+	ChatStateManager getChatStateManager();
 
 	RoomDiscoveryManager getRoomDiscoveryManager();
 

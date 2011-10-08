@@ -1,10 +1,9 @@
 package com.calclab.hablar.user.client.storedpresence;
 
-import com.calclab.emite.core.client.xmpp.stanzas.IQ;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
+import com.calclab.emite.core.client.stanzas.IQ;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
 import com.calclab.emite.xep.storage.client.PrivateStorageManager;
-import com.calclab.emite.xep.storage.client.events.PrivateStorageResponseEvent;
-import com.calclab.emite.xep.storage.client.events.PrivateStorageResponseHandler;
+import com.calclab.emite.xep.storage.client.PrivateStorageResponseEvent;
 import com.google.gwt.core.client.GWT;
 
 public class StoredPresenceManager {
@@ -14,8 +13,8 @@ public class StoredPresenceManager {
 		this.manager = manager;
 	}
 
-	public void add(final StoredPresence presence, final PrivateStorageResponseHandler handler) {
-		manager.retrieve(StoredPresences.empty, new PrivateStorageResponseHandler() {
+	public void add(final StoredPresence presence, final PrivateStorageResponseEvent.Handler handler) {
+		manager.retrieve(StoredPresences.empty, new PrivateStorageResponseEvent.Handler() {
 			@Override
 			public void onStorageResponse(PrivateStorageResponseEvent event) {
 				IQ response = event.getResponseIQ();
@@ -31,12 +30,12 @@ public class StoredPresenceManager {
 		});
 	}
 
-	public void add(final String status, final Show show, final PrivateStorageResponseHandler handler) {
+	public void add(final String status, final Show show, final PrivateStorageResponseEvent.Handler handler) {
 		add(new StoredPresence(status, show), handler);
 	}
 
 	public void clearAll() {
-		manager.store(StoredPresences.empty, new PrivateStorageResponseHandler() {
+		manager.store(StoredPresences.empty, new PrivateStorageResponseEvent.Handler() {
 			@Override
 			public void onStorageResponse(PrivateStorageResponseEvent event) {
 				checkError(event.getResponseIQ());
@@ -44,7 +43,7 @@ public class StoredPresenceManager {
 		});
 	}
 
-	public void get(final PrivateStorageResponseHandler handler) {
+	public void get(final PrivateStorageResponseEvent.Handler handler) {
 		manager.retrieve(StoredPresences.empty, handler);
 	}
 

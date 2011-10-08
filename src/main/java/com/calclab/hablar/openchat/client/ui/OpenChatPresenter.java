@@ -1,8 +1,8 @@
 package com.calclab.hablar.openchat.client.ui;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.PagePresenter;
@@ -18,7 +18,7 @@ public class OpenChatPresenter extends PagePresenter<OpenChatDisplay> {
 	private final XmppRoster roster;
 	private final TextValidator nameValidator;
 
-	public OpenChatPresenter(final XmppSession session, final XmppRoster roster, final ChatManager chatManager, final HablarEventBus eventBus,
+	public OpenChatPresenter(final XmppSession session, final XmppRoster roster, final PairChatManager chatManager, final HablarEventBus eventBus,
 			final OpenChatDisplay display) {
 		super(TYPE, "" + ++index, eventBus, display);
 		this.roster = roster;
@@ -38,7 +38,7 @@ public class OpenChatPresenter extends PagePresenter<OpenChatDisplay> {
 				if (text.length() > 0) {
 					chatManager.open(userJid);
 				}
-				if (display.getAddToRoster().getValue()) {
+				if (display.getAddToRoster().getValue().booleanValue()) {
 					addToRoster(userJid);
 				}
 				requestVisibility(Visibility.hidden);

@@ -2,17 +2,14 @@ package com.calclab.hablar.roster.client.page;
 
 import java.util.HashMap;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
+import com.calclab.emite.im.client.events.RosterGroupChangedEvent;
+import com.calclab.emite.im.client.events.RosterItemChangedEvent;
 import com.calclab.emite.im.client.roster.RosterGroup;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.im.client.roster.events.RosterGroupChangedEvent;
-import com.calclab.emite.im.client.roster.events.RosterGroupChangedHandler;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedEvent;
-import com.calclab.emite.im.client.roster.events.RosterItemChangedHandler;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.Page;
 import com.calclab.hablar.core.client.page.PagePresenter;
@@ -41,11 +38,10 @@ public class RosterPresenter extends PagePresenter<RosterDisplay> implements Ros
 	private static int index = 0;
 
 	public static RosterPage asRoster(final Page<?> page) {
-		if (TYPE.equals(page.getType())) {
+		if (TYPE.equals(page.getType()))
 			return (RosterPage) page;
-		} else {
-			return null;
-		}
+		
+		return null;
 	}
 
 	private boolean active;
@@ -59,7 +55,7 @@ public class RosterPresenter extends PagePresenter<RosterDisplay> implements Ros
 
 	private final NonBlockingCommandScheduler commandQueue;
 
-	public RosterPresenter(final XmppSession session, final XmppRoster roster, final ChatManager chatManager, final HablarEventBus eventBus,
+	public RosterPresenter(final XmppSession session, final XmppRoster roster, final PairChatManager chatManager, final HablarEventBus eventBus,
 			final RosterDisplay display, final RosterConfig rosterConfig, final NonBlockingCommandScheduler commandQueue) {
 		super(TYPE, "" + ++index, eventBus, display);
 		this.session = session;
@@ -120,8 +116,7 @@ public class RosterPresenter extends PagePresenter<RosterDisplay> implements Ros
 	}
 
 	private void addRosterListeners() {
-		roster.addRosterItemChangedHandler(new RosterItemChangedHandler() {
-
+		roster.addRosterItemChangedHandler(new RosterItemChangedEvent.Handler() {
 			@Override
 			public void onRosterItemChanged(final RosterItemChangedEvent event) {
 				if (event.isAdded()) {
@@ -138,10 +133,9 @@ public class RosterPresenter extends PagePresenter<RosterDisplay> implements Ros
 			}
 		});
 
-		roster.addRosterGroupChangedHandler(new RosterGroupChangedHandler() {
-
+		roster.addRosterGroupChangedHandler(new RosterGroupChangedEvent.Handler() {
 			@Override
-			public void onGroupChanged(final RosterGroupChangedEvent event) {
+			public void onRosterGroupChanged(final RosterGroupChangedEvent event) {
 				if (event.isAdded()) {
 					createGroup(event.getRosterGroup());
 				} else if (event.isRemoved()) {
@@ -156,11 +150,10 @@ public class RosterPresenter extends PagePresenter<RosterDisplay> implements Ros
 	}
 
 	private void addSessionListeners() {
-
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				setSessionState();
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
+				setSessionStatus();
 			}
 		});
 
@@ -185,8 +178,8 @@ public class RosterPresenter extends PagePresenter<RosterDisplay> implements Ros
 		}
 	}
 
-	private void setSessionState() {
-		final boolean isActive = SessionStates.ready.equals(session.getSessionState());
+	private void setSessionStatus() {
+		final boolean isActive = SessionStatus.ready.equals(session.getStatus());
 		if (active != isActive) {
 			active = isActive;
 			display.setActive(active);

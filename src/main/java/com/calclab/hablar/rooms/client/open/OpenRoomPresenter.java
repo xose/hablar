@@ -1,12 +1,11 @@
 package com.calclab.hablar.rooms.client.open;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.ChatStates;
-import com.calclab.emite.xep.muc.client.Room;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
+import com.calclab.emite.im.client.chat.ChatStatus;
+import com.calclab.emite.im.client.events.ChatStatusChangedEvent;
+import com.calclab.emite.xep.muc.client.RoomChat;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.groupchat.client.OpenGroupChatPresenter;
 import com.calclab.hablar.rooms.client.OpenNewRoomPresenter;
@@ -21,9 +20,9 @@ import com.calclab.hablar.rooms.client.RoomName;
 public abstract class OpenRoomPresenter extends EditRoomPresenter {
 	protected final String roomsService;
 	protected final XmppSession session;
-	protected final RoomManager roomManager;
+	protected final RoomChatManager roomManager;
 
-	public OpenRoomPresenter(final XmppSession session, final RoomManager roomManager, final String type, final HablarEventBus eventBus,
+	public OpenRoomPresenter(final XmppSession session, final RoomChatManager roomManager, final String type, final HablarEventBus eventBus,
 			final EditRoomDisplay display, final String roomsService) {
 		super(type, eventBus, display);
 		this.session = session;
@@ -37,12 +36,12 @@ public abstract class OpenRoomPresenter extends EditRoomPresenter {
 		final XmppURI user = session.getCurrentUserURI();
 		final String roomName = RoomName.encode(display.getRoomName().getValue(), user.getResource());
 		final XmppURI roomUri = XmppURI.uri(roomName, roomsService, user.getNode());
-		final Room room = (Room) roomManager.open(roomUri);
+		final RoomChat room = roomManager.open(roomUri);
 
-		room.addChatStateChangedHandler(true, new StateChangedHandler() {
+		room.addChatStatusChangedHandler(true, new ChatStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				if (event.is(ChatStates.ready)) {
+			public void onChatStatusChanged(final ChatStatusChangedEvent event) {
+				if (event.is(ChatStatus.ready)) {
 					sendInvitations(room);
 				}
 			}

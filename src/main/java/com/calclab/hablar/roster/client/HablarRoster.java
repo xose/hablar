@@ -1,10 +1,9 @@
 package com.calclab.hablar.roster.client;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.SubscriptionHandler;
 import com.calclab.emite.im.client.roster.SubscriptionHandler.Behaviour;
@@ -22,7 +21,7 @@ public class HablarRoster {
 	private final RosterPage rosterPage;
 
 	public HablarRoster(final Hablar hablar, final RosterConfig rosterConfig, final XmppSession session, final XmppRoster roster,
-			final ChatManager chatManager, final SubscriptionHandler subscriptionHandler) {
+			final PairChatManager chatManager, final SubscriptionHandler subscriptionHandler) {
 
 		final NonBlockingCommandScheduler commandQueue = new NonBlockingCommandScheduler();
 
@@ -41,10 +40,10 @@ public class HablarRoster {
 		rosterPage.setVisibility(Visibility.notFocused);
 		hablar.addPage(rosterPage);
 
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				if (SessionStates.ready.equals(event.getState())) {
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
+				if (SessionStatus.ready.equals(event.getStatus())) {
 					rosterPage.requestVisibility(Visibility.focused);
 				}
 			}

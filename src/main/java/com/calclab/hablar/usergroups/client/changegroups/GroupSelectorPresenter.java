@@ -22,7 +22,7 @@ public class GroupSelectorPresenter implements Presenter<GroupSelectorDisplay> {
 	}
 
 	public boolean isSelected() {
-		return display.getSelected().getValue() == true && !Empty.is(display.getEditableName().getText());
+		return display.getSelected().getValue().booleanValue() == true && !Empty.is(display.getEditableName().getText());
 	}
 
 	public void setProperties(final String name, final boolean editable, final boolean selected) {

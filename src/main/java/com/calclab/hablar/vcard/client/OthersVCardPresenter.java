@@ -1,9 +1,8 @@
 package com.calclab.hablar.vcard.client;
 
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 import com.calclab.emite.xep.vcard.client.VCardManager;
-import com.calclab.emite.xep.vcard.client.events.VCardResponseEvent;
-import com.calclab.emite.xep.vcard.client.events.VCardResponseHandler;
+import com.calclab.emite.xep.vcard.client.VCardResponseEvent;
 import com.calclab.hablar.client.HablarMessages;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -35,7 +34,7 @@ public class OthersVCardPresenter extends VCardPage {
 
 	public void setUser(final XmppURI jid) {
 		display.setPageTitle(VCardMessages.msg.profileOfBuddy(jid.getShortName()));
-		vCardManager.getUserVCard(jid, new VCardResponseHandler() {
+		vCardManager.getUserVCard(jid, new VCardResponseEvent.Handler() {
 			@Override
 			public void onVCardResponse(final VCardResponseEvent event) {
 				modelToDisplay(event.getVCardResponse().getVCard());

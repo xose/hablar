@@ -1,8 +1,8 @@
 package com.calclab.hablar.rooms.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.rooms.client.open.EditRoomDisplay;
 import com.calclab.hablar.rooms.client.open.OpenRoomPresenter;
@@ -12,7 +12,7 @@ public class OpenNewRoomPresenter extends OpenRoomPresenter {
 	private int roomNumber = 1;
 	private final XmppRoster roster;
 
-	public OpenNewRoomPresenter(final XmppSession session, final XmppRoster roster, final RoomManager roomManager, final String roomsService,
+	public OpenNewRoomPresenter(final XmppSession session, final XmppRoster roster, final RoomChatManager roomManager, final String roomsService,
 			final HablarEventBus eventBus, final EditRoomDisplay display) {
 		super(session, roomManager, TYPE, eventBus, display, roomsService);
 		this.roster = roster;

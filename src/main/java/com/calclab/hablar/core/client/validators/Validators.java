@@ -1,6 +1,6 @@
 package com.calclab.hablar.core.client.validators;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.google.gwt.core.client.GWT;
 
 public class Validators {

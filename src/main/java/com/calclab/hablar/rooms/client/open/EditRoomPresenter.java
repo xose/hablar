@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.calclab.emite.im.client.roster.RosterItem;
-import com.calclab.emite.xep.muc.client.Room;
+import com.calclab.emite.xep.muc.client.RoomChat;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.PagePresenter;
 import com.calclab.hablar.core.client.ui.selectionlist.Selectable;
@@ -90,7 +90,7 @@ public abstract class EditRoomPresenter extends PagePresenter<EditRoomDisplay> {
 
 	protected abstract void onPageOpen();
 
-	protected void sendInvitations(final Room room) {
+	protected void sendInvitations(final RoomChat room) {
 		final String reasonText = display.getMessage().getText();
 		for (final RosterItem item : getItems()) {
 			GWT.log("INVITING: " + item.getJID());

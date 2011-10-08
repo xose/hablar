@@ -63,6 +63,7 @@ public class MainContainer implements PagesContainer {
 
 		final Visibility initialVisibility = page.getVisibility();
 		if (initialVisibility == Visibility.hidden) {
+			// do nothing
 		} else if (initialVisibility == Visibility.focused) {
 			display.add(pageWidget, headWidget);
 			focus(page);

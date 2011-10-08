@@ -1,18 +1,14 @@
 package com.calclab.hablar.rooms.client.room;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.emite.xep.muc.client.Occupant;
-import com.calclab.emite.xep.muc.client.Room;
-import com.calclab.emite.xep.muc.client.events.OccupantChangedEvent;
-import com.calclab.emite.xep.muc.client.events.OccupantChangedHandler;
-import com.calclab.emite.xep.muc.client.events.RoomInvitationSentEvent;
-import com.calclab.emite.xep.muc.client.events.RoomInvitationSentHandler;
-import com.calclab.emite.xep.muc.client.subject.RoomSubject;
-import com.calclab.emite.xep.muc.client.subject.RoomSubjectChangedEvent;
-import com.calclab.emite.xep.muc.client.subject.RoomSubjectChangedHandler;
+import com.calclab.emite.xep.muc.client.OccupantChangedEvent;
+import com.calclab.emite.xep.muc.client.RoomChat;
+import com.calclab.emite.xep.muc.client.RoomInvitationSentEvent;
+import com.calclab.emite.xep.muc.client.RoomSubjectChangedEvent;
 import com.calclab.hablar.chat.client.ui.ChatMessage;
 import com.calclab.hablar.rooms.client.RoomMessages;
 
@@ -22,11 +18,11 @@ public class RoomNotificationPresenter {
 
 	private final String me;
 
-	public RoomNotificationPresenter(final XmppSession session, final XmppRoster roster, final RoomPresenter roomPresenter, final Room room) {
+	public RoomNotificationPresenter(final XmppSession session, final XmppRoster roster, final RoomPresenter roomPresenter, final RoomChat room) {
 		this.roomPresenter = roomPresenter;
 		me = session.getCurrentUserURI().getNode();
 
-		room.addOccupantChangedHandler(new OccupantChangedHandler() {
+		room.addOccupantChangedHandler(new OccupantChangedEvent.Handler() {
 
 			@Override
 			public void onOccupantChanged(final OccupantChangedEvent event) {
@@ -51,10 +47,10 @@ public class RoomNotificationPresenter {
 		 * show(i18n().occupantModified(occupant.getNick())); } });
 		 */
 
-		RoomSubject.addRoomSubjectChangedHandler(room, new RoomSubjectChangedHandler() {
+		room.addRoomSubjectChangedHandler(new RoomSubjectChangedEvent.Handler() {
 
 			@Override
-			public void onSubjectChanged(final RoomSubjectChangedEvent event) {
+			public void onRoomSubjectChanged(final RoomSubjectChangedEvent event) {
 				final Occupant occupant = room.getOccupantByOccupantUri(event.getOccupantUri());
 
 				String message;
@@ -67,7 +63,7 @@ public class RoomNotificationPresenter {
 			}
 		});
 
-		room.addRoomInvitationSentHandler(new RoomInvitationSentHandler() {
+		room.addRoomInvitationSentHandler(new RoomInvitationSentEvent.Handler() {
 
 			@Override
 			public void onRoomInvitationSent(final RoomInvitationSentEvent event) {

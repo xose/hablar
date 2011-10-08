@@ -2,7 +2,7 @@ package com.calclab.hablar.chat.client.ui;
 
 import java.util.HashMap;
 
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 
 public class ColorHelper {
 	private static final double BRIGHTNESS = 0.5;

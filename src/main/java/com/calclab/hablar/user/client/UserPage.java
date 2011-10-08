@@ -2,15 +2,13 @@ package com.calclab.hablar.user.client;
 
 import java.util.ArrayList;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence;
-import com.calclab.emite.core.client.xmpp.stanzas.Presence.Show;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.Presence;
+import com.calclab.emite.core.client.stanzas.Presence.Show;
+import com.calclab.emite.im.client.events.OwnPresenceChangedEvent;
 import com.calclab.emite.im.client.presence.PresenceManager;
-import com.calclab.emite.im.client.presence.events.OwnPresenceChangedEvent;
-import com.calclab.emite.im.client.presence.events.OwnPresenceChangedHandler;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.core.client.page.Page;
 import com.calclab.hablar.core.client.page.PagePresenter;
@@ -35,14 +33,14 @@ public class UserPage extends PagePresenter<UserDisplay> {
 
 		setVisibility(Visibility.notFocused);
 
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
 				updatePageState();
 			}
 		});
 
-		manager.addOwnPresenceChangedHandler(new OwnPresenceChangedHandler() {
+		manager.addOwnPresenceChangedHandler(new OwnPresenceChangedEvent.Handler() {
 			@Override
 			public void onOwnPresenceChanged(final OwnPresenceChangedEvent event) {
 				updatePageState();
@@ -74,7 +72,7 @@ public class UserPage extends PagePresenter<UserDisplay> {
 	 */
 	@Override
 	public void requestVisibility(final Visibility newVisibility) {
-		final boolean isReady = SessionStates.ready.equals(session.getSessionState());
+		final boolean isReady = SessionStatus.ready.equals(session.getStatus());
 		if (isReady || (newVisibility == Visibility.hidden) || (newVisibility == Visibility.notFocused)) {
 			super.requestVisibility(newVisibility);
 		}
@@ -110,11 +108,11 @@ public class UserPage extends PagePresenter<UserDisplay> {
 	}
 
 	private void updatePageState() {
-		updatePageState(session.getSessionState(), manager.getOwnPresence());
+		updatePageStatus(session.getStatus(), manager.getOwnPresence());
 	}
 
-	private void updatePageState(final String sessionState, final Presence presence) {
-		if (SessionStates.ready.equals(sessionState)) {
+	private void updatePageStatus(final SessionStatus status, final Presence presence) {
+		if (SessionStatus.ready.equals(status)) {
 			String userStatus = presence != null ? presence.getStatus() : "";
 			userStatus = (userStatus == null) || userStatus.isEmpty() ? "" : " - " + userStatus;
 			model.setPageTitle(session.getCurrentUserURI().getShortName() + userStatus);

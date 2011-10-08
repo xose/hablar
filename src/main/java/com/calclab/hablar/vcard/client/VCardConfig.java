@@ -1,6 +1,6 @@
 package com.calclab.hablar.vcard.client;
 
-import com.calclab.emite.browser.client.PageAssist;
+import com.calclab.emite.core.client.browser.PageAssist;
 
 public class VCardConfig {
 	/**
@@ -11,7 +11,7 @@ public class VCardConfig {
 
 	public static VCardConfig getFromMeta() {
 		VCardConfig config = new VCardConfig();
-		config.vCardReadOnly = PageAssist.isMetaTrue("hablar.vcard.read-only", false);
+		config.vCardReadOnly = PageAssist.getMetaBoolean("hablar.vcard.read-only", false);
 		return config;
 	}
 

@@ -1,17 +1,16 @@
 package com.calclab.hablar.groupchat.client;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.Chat;
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 import com.calclab.emite.im.client.chat.ChatProperties;
-import com.calclab.emite.im.client.chat.ChatStates;
+import com.calclab.emite.im.client.chat.ChatStatus;
+import com.calclab.emite.im.client.chat.pair.PairChat;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
+import com.calclab.emite.im.client.events.ChatStatusChangedEvent;
 import com.calclab.emite.im.client.roster.RosterItem;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.muc.client.Room;
-import com.calclab.emite.xep.muc.client.RoomManager;
+import com.calclab.emite.xep.muc.client.RoomChat;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
 import com.calclab.hablar.rooms.client.open.EditRoomPresenter;
 import com.calclab.hablar.rooms.client.open.EditRoomWidget;
@@ -19,14 +18,14 @@ import com.calclab.hablar.rooms.client.open.EditRoomWidget;
 public class ConvertToGroupChatPresenter extends EditRoomPresenter {
 
 	private static final String TYPE = "ConvertToGroupChat";
-	private Chat chat;
+	private PairChat chat;
 	private final String roomsService;
 	private final XmppSession session;
 	private final XmppRoster roster;
-	private final ChatManager chatManager;
-	private final RoomManager roomManager;
+	private final PairChatManager chatManager;
+	private final RoomChatManager roomManager;
 
-	public ConvertToGroupChatPresenter(final XmppSession session, final XmppRoster roster, final ChatManager chatManager, final RoomManager roomManager,
+	public ConvertToGroupChatPresenter(final XmppSession session, final XmppRoster roster, final PairChatManager chatManager, final RoomChatManager roomManager,
 			final String roomsService, final HablarEventBus eventBus, final EditRoomWidget openRoomWidget) {
 		super(TYPE, eventBus, openRoomWidget);
 		this.session = session;
@@ -38,7 +37,7 @@ public class ConvertToGroupChatPresenter extends EditRoomPresenter {
 		display.setAcceptText(GroupChatMessages.msg.convertToGroupAction());
 	}
 
-	public void setChat(final Chat chat) {
+	public void setChat(final PairChat chat) {
 		this.chat = chat;
 	}
 
@@ -51,12 +50,12 @@ public class ConvertToGroupChatPresenter extends EditRoomPresenter {
 
 		final ChatProperties newProperties = new ChatProperties(roomUri, chat.getProperties());
 
-		final Room room = (Room) roomManager.openChat(newProperties, true);
+		final RoomChat room = roomManager.openChat(newProperties, true);
 
-		room.addChatStateChangedHandler(true, new StateChangedHandler() {
+		room.addChatStatusChangedHandler(true, new ChatStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				if (event.is(ChatStates.ready)) {
+			public void onChatStatusChanged(final ChatStatusChangedEvent event) {
+				if (event.is(ChatStatus.ready)) {
 					sendInvitations(room);
 					chatManager.close(chat);
 				}

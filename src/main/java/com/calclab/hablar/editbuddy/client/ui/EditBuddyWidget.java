@@ -39,7 +39,7 @@ public class EditBuddyWidget extends Composite implements EditBuddyDisplay {
 		return new HasState<Boolean>() {
 			@Override
 			public void setState(final Boolean state) {
-				save.setEnabled(state);
+				save.setEnabled(state.booleanValue());
 			}
 		};
 	}

@@ -1,17 +1,16 @@
 package com.calclab.hablar.login.client;
 
-import com.calclab.emite.core.client.events.StateChangedEvent;
-import com.calclab.emite.core.client.events.StateChangedHandler;
-import com.calclab.emite.core.client.xmpp.session.SessionStates;
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.events.SessionStatusChangedEvent;
+import com.calclab.emite.core.client.session.SessionStatus;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.page.Page;
 import com.calclab.hablar.core.client.page.PagePresenter.Visibility;
 
 public class HablarLogin {
 
-	private static void setState(final Page<?> login, final String sessionState) {
-		if (SessionStates.disconnected.equals(sessionState)) {
+	private static void setStatus(final Page<?> login, final SessionStatus sessionStatus) {
+		if (SessionStatus.disconnected.equals(sessionStatus)) {
 			login.requestVisibility(Visibility.focused);
 		}
 	}
@@ -20,10 +19,10 @@ public class HablarLogin {
 		final LoginPage login = new LoginPage(session, hablar.getEventBus(), new LoginWidget());
 		hablar.addPage(login);
 
-		session.addSessionStateChangedHandler(true, new StateChangedHandler() {
+		session.addSessionStatusChangedHandler(true, new SessionStatusChangedEvent.Handler() {
 			@Override
-			public void onStateChanged(final StateChangedEvent event) {
-				setState(login, event.getState());
+			public void onSessionStatusChanged(final SessionStatusChangedEvent event) {
+				setStatus(login, event.getStatus());
 			}
 		});
 

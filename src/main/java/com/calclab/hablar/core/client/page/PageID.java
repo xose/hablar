@@ -21,8 +21,8 @@ public class PageID {
 	public boolean equals(Object obj) {
 		if (obj instanceof PageID)
 			return ((PageID) obj).id == id;
-		else
-			return false;
+		
+		return false;
 	}
 
 	@Override

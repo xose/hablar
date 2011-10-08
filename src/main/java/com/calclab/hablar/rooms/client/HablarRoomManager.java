@@ -3,17 +3,14 @@ package com.calclab.hablar.rooms.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
-import com.calclab.emite.core.client.xmpp.stanzas.XmppURI;
-import com.calclab.emite.im.client.chat.Chat;
-import com.calclab.emite.im.client.chat.events.ChatChangedEvent;
-import com.calclab.emite.im.client.chat.events.ChatChangedHandler;
+import com.calclab.emite.core.client.session.XmppSession;
+import com.calclab.emite.core.client.stanzas.XmppURI;
 import com.calclab.emite.im.client.roster.XmppRoster;
-import com.calclab.emite.xep.muc.client.Room;
+import com.calclab.emite.xep.muc.client.RoomChat;
+import com.calclab.emite.xep.muc.client.RoomChatChangedEvent;
 import com.calclab.emite.xep.muc.client.RoomInvitation;
-import com.calclab.emite.xep.muc.client.RoomManager;
-import com.calclab.emite.xep.muc.client.events.RoomInvitationEvent;
-import com.calclab.emite.xep.muc.client.events.RoomInvitationHandler;
+import com.calclab.emite.xep.muc.client.RoomChatManager;
+import com.calclab.emite.xep.muc.client.RoomInvitationReceivedEvent;
 import com.calclab.hablar.chat.client.ui.ChatMessage;
 import com.calclab.hablar.core.client.Hablar;
 import com.calclab.hablar.core.client.mvp.HablarEventBus;
@@ -29,7 +26,7 @@ public class HablarRoomManager {
 	}
 
 	public static interface RoomPresenterFactory {
-		RoomPresenter create(HablarEventBus eventBus, Room room, RoomDisplay display);
+		RoomPresenter create(HablarEventBus eventBus, RoomChat room, RoomDisplay display);
 	}
 
 	private final Hablar hablar;
@@ -38,7 +35,7 @@ public class HablarRoomManager {
 	private final HashMap<XmppURI, RoomPresenter> roomPages;
 	private final ArrayList<RoomInvitation> acceptedInvitations;
 
-	public HablarRoomManager(final RoomManager rooms, final Hablar hablar, final HablarRoomsConfig config, final RoomPageFactory factory,
+	public HablarRoomManager(final RoomChatManager rooms, final Hablar hablar, final HablarRoomsConfig config, final RoomPageFactory factory,
 			final RoomPresenterFactory presenterFactory) {
 		this.hablar = hablar;
 		this.factory = factory;
@@ -46,20 +43,20 @@ public class HablarRoomManager {
 		acceptedInvitations = new ArrayList<RoomInvitation>();
 		roomPages = new HashMap<XmppURI, RoomPresenter>();
 
-		rooms.addChatChangedHandler(new ChatChangedHandler() {
+		rooms.addRoomChatChangedHandler(new RoomChatChangedEvent.Handler() {
 			@Override
-			public void onChatChanged(final ChatChangedEvent event) {
+			public void onRoomChatChanged(final RoomChatChangedEvent event) {
 				if (event.isCreated()) {
-					createRoom((Room) event.getChat());
+					createRoom(event.getChat());
 				} else if (event.isOpened()) {
 					openRoom(event.getChat());
 				}
 			}
 		});
 
-		rooms.addRoomInvitationReceivedHandler(new RoomInvitationHandler() {
+		rooms.addRoomInvitationReceivedHandler(new RoomInvitationReceivedEvent.Handler() {
 			@Override
-			public void onRoomInvitation(final RoomInvitationEvent event) {
+			public void onRoomInvitationReceived(final RoomInvitationReceivedEvent event) {
 				final RoomInvitation invitation = event.getRoomInvitation();
 				acceptedInvitations.add(invitation);
 				rooms.acceptRoomInvitation(invitation);
@@ -67,7 +64,7 @@ public class HablarRoomManager {
 		});
 	}
 
-	public HablarRoomManager(final XmppSession session, final XmppRoster roster, final RoomManager rooms, final Hablar hablar, final HablarRoomsConfig config) {
+	public HablarRoomManager(final XmppSession session, final XmppRoster roster, final RoomChatManager rooms, final Hablar hablar, final HablarRoomsConfig config) {
 		this(rooms, hablar, config, new RoomPageFactory() {
 			@Override
 			public RoomDisplay create(final boolean sendButtonVisible) {
@@ -75,14 +72,14 @@ public class HablarRoomManager {
 			}
 		}, new RoomPresenterFactory() {
 			@Override
-			public RoomPresenter create(final HablarEventBus eventBus, final Room room, final RoomDisplay display) {
+			public RoomPresenter create(final HablarEventBus eventBus, final RoomChat room, final RoomDisplay display) {
 				return new RoomPresenter(session, roster, eventBus, room, display);
 			}
 
 		});
 	}
 
-	protected void createRoom(final Room room) {
+	protected void createRoom(final RoomChat room) {
 		final RoomDisplay display = factory.create(true);
 		final RoomPresenter presenter = presenterFactory.create(hablar.getEventBus(), room, display);
 		roomPages.put(room.getURI(), presenter);
@@ -98,7 +95,7 @@ public class HablarRoomManager {
 		return null;
 	}
 
-	protected void openRoom(final Chat room) {
+	protected void openRoom(final RoomChat room) {
 		final RoomPresenter roomPage = roomPages.get(room.getURI());
 		assert roomPage != null : "Error in room pages - HablarRoomManager";
 		final RoomInvitation invitation = getInvitation(room.getURI());

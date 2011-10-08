@@ -1,6 +1,6 @@
 package com.calclab.hablar.search.client;
 
-import com.calclab.emite.im.client.chat.ChatManager;
+import com.calclab.emite.im.client.chat.pair.PairChatManager;
 import com.calclab.emite.im.client.roster.XmppRoster;
 import com.calclab.emite.xep.search.client.SearchResultItem;
 import com.calclab.hablar.core.client.ui.menu.Menu;
@@ -13,9 +13,9 @@ public class SearchBasicActions {
 	public static final String REMOVE_ROSTERITEM_DEB_ID = "SearchLogic-remove-item";
 
 	private final XmppRoster roster;
-	private final ChatManager chatManager;
+	private final PairChatManager chatManager;
 
-	public SearchBasicActions(final XmppRoster roster, final ChatManager chatManager) {
+	public SearchBasicActions(final XmppRoster roster, final PairChatManager chatManager) {
 		this.roster = roster;
 		this.chatManager = chatManager;
 	}

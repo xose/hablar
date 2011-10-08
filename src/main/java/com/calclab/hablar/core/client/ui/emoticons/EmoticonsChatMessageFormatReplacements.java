@@ -1,6 +1,5 @@
 package com.calclab.hablar.core.client.ui.emoticons;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.calclab.hablar.chat.client.ui.chatmessageformat.ChatMessageFormatReplacements;

@@ -2,7 +2,7 @@ package com.calclab.hablar.vcard.client;
 
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-public class OtherVCardWidget extends VCardWidget implements VCardDisplay {
+public class OtherVCardWidget extends VCardWidget {
 
 	public OtherVCardWidget(final boolean readOnly) {
 		final ScrollPanel scroll = new ScrollPanel();

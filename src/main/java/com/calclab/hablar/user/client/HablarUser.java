@@ -1,6 +1,6 @@
 package com.calclab.hablar.user.client;
 
-import com.calclab.emite.core.client.xmpp.session.XmppSession;
+import com.calclab.emite.core.client.session.XmppSession;
 import com.calclab.emite.im.client.presence.PresenceManager;
 import com.calclab.emite.xep.storage.client.PrivateStorageManager;
 import com.calclab.hablar.core.client.Hablar;
